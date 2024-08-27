@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
 
 const CameraCapture = () => {
@@ -6,11 +6,38 @@ const CameraCapture = () => {
   const canvasRef = useRef(null);
   const [imageData, setImageData] = useState(null);
   const [error, setError] = useState('');
+  const [devices, setDevices] = useState([]);
+  const [selectedDeviceId, setSelectedDeviceId] = useState(null);
+
+  useEffect(() => {
+    // Obtener lista de dispositivos multimedia
+    const getDevices = async () => {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter(
+          device => device.kind === 'videoinput'
+        );
+        setDevices(videoDevices);
+        if (videoDevices.length > 0) {
+          setSelectedDeviceId(videoDevices[0].deviceId); // Seleccionar la primera cámara por defecto
+        }
+      } catch (err) {
+        setError('Error retrieving media devices.');
+        console.error('Error retrieving media devices', err);
+      }
+    };
+
+    getDevices();
+  }, []);
 
   const startCamera = async () => {
     setError(''); // Limpiar errores anteriores
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          deviceId: selectedDeviceId ? { exact: selectedDeviceId } : undefined,
+        },
+      });
       videoRef.current.srcObject = stream;
     } catch (err) {
       setError(
@@ -69,10 +96,27 @@ const CameraCapture = () => {
     <div>
       <h1>Capture and Upload Photo</h1>
       {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      <div>
+        {devices.length > 1 && (
+          <select
+            value={selectedDeviceId}
+            onChange={e => setSelectedDeviceId(e.target.value)}
+          >
+            {devices.map(device => (
+              <option key={device.deviceId} value={device.deviceId}>
+                {device.label || `Camera ${device.deviceId}`}
+              </option>
+            ))}
+          </select>
+        )}
+      </div>
+
       <div>
         <video ref={videoRef} autoPlay />
         <canvas ref={canvasRef} style={{ display: 'none' }} />
       </div>
+
       {!imageData && <button onClick={startCamera}>Start Camera</button>}
       {!imageData && <button onClick={capturePhoto}>Capture Photo</button>}
       {imageData && (
