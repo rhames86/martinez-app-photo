@@ -94,10 +94,12 @@ const CameraCapture = () => {
 
   return (
     <div>
-      <h1>Capture and Upload Photo</h1>
+      <h1>Sistema de Digitalización</h1>
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <div>
+        {' '}
+        <h2>Seleccione la cámara</h2>
         {devices.length > 1 && (
           <select
             value={selectedDeviceId}
@@ -117,13 +119,13 @@ const CameraCapture = () => {
         <canvas ref={canvasRef} style={{ display: 'none' }} />
       </div>
 
-      {!imageData && <button onClick={startCamera}>Start Camera</button>}
-      {!imageData && <button onClick={capturePhoto}>Capture Photo</button>}
+      {!imageData && <button onClick={startCamera}>Iniciar Cámara</button>}
+      {!imageData && <button onClick={capturePhoto}>Tomar Foto</button>}
       {imageData && (
         <div>
           <img src={imageData} alt="Captured" />
-          <button onClick={retakePhoto}>Retake Photo</button>
-          <button onClick={uploadPhoto}>Submit Photo</button>
+          <button onClick={retakePhoto}>Tomar de Nuevo</button>
+          <button onClick={uploadPhoto}>Subir Foto</button>
         </div>
       )}
     </div>
