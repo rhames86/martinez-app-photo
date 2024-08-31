@@ -89,3 +89,12 @@ select {
   padding: 10px;
   border-radius: 5px;
 }
+
+/* Adaptación para pantallas móviles y tabletas */
+@media (max-width: 768px) {
+  button {
+    width: 112px; /* 40% más grande */
+    height: 112px; /* 40% más grande */
+    font-size: 22px; /* Aumentar el tamaño de la fuente */
+  }
+}
