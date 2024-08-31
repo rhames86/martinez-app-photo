@@ -91,7 +91,6 @@ const CameraCapture = () => {
 
   return (
     <div className="container">
-      <h1>Capture and Upload Photo</h1>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {devices.length > 1 && (
@@ -112,17 +111,15 @@ const CameraCapture = () => {
         <canvas ref={canvasRef} style={{ display: "none" }} />
       </div>
 
-      <div>
-        {!imageData && <button onClick={startCamera}>Iniciar Cámara</button>}
-        {!imageData && <button onClick={capturePhoto}>Tomar Imágen</button>}
-        {imageData && <img src={imageData} alt="Captured" />}
-        {imageData && (
-          <div>
-            <button onClick={retakePhoto}>🔄</button>
-            <button onClick={uploadPhoto}>⬆️</button>
-          </div>
-        )}
-      </div>
+      {!imageData && <button id="startCamera" onClick={startCamera}>Iniciar Cámara</button>}
+      {!imageData && <button id="capturePhoto" onClick={capturePhoto}>Tomar Imágen</button>}
+      {imageData && <img src={imageData} alt="Captured" />}
+      {imageData && (
+        <div>
+          <button id="retakePhoto" onClick={retakePhoto}>🔄</button>
+          <button id="uploadPhoto" onClick={uploadPhoto}>⬆️</button>
+        </div>
+      )}
     </div>
   );
 };
