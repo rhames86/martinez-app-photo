@@ -67,12 +67,13 @@ const CameraCapture = () => {
   };
 
   const uploadPhoto = async () => {
-    setError(""); // Limpiar errores anteriores
     try {
       if (!imageData) {
-        throw new Error("No photo to upload.");
+        setError("No photo to upload.");
+        return;
       }
 
+      setError(""); // Limpiar errores anteriores
       const formData = new FormData();
       formData.append("image", imageData);
 
@@ -91,7 +92,8 @@ const CameraCapture = () => {
 
   return (
     <div className="container">
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {/* Mensaje de error */}
+      {error && <p className="error-message">{error}</p>}
 
       {devices.length > 1 && (
         <select
